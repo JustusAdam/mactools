@@ -1,0 +1,71 @@
+= Essential Software for my Mac
+Justus Adam <me@justus.science>
+
+== Management
+
+|===
+| Tools name | Installation
+
+| xcode command line tools
+| `xcode-select --install`
+
+| https://brew.sh[Homebrew]
+| `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+|===
+
+== CLI Tools
+
+|===
+| Tool Name | Installation
+
+| https://git-scm.com[git]
+| updated version with `brew install git`
+
+| brew cask
+| `brew install caskroom/casks/cask`
+
+| Haskell
+| `brew install ghc cabal`
+|===
+
+== Graphic tools
+
+|===
+| Tool Name | Installation
+
+| https://atom.io[atom]
+| `brew cask install atom`
+
+| Kodi
+| `brew cask install kodi`
+
+| Gitter
+| `brew cask install gitter`
+
+| Slack
+| `brew cask install slack`
+
+| Evernote
+| `brew cask install evernote`
+
+| https://fluidapp.com[Fluid]
+| install from https://fluidapp.com[website]
+
+| Reeder
+| Install from app store (because of license)
+|===
+
+== Fonts
+
+|===
+| Font name | Installation
+
+| Source Code Pro
+| https://github.com/adobe-fonts/source-code-pro/releases/latest[Download latest release]
+
+| Open Sans
+| https://github.com/FontFaceKit/open-sans/releases/latest[Download latest release]
+
+| Fira Mono
+| https://github.com/mozilla/Fira/releases/latest[Download latest release]
+|===
