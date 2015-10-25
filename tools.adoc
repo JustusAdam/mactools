@@ -3,69 +3,90 @@ Justus Adam <me@justus.science>
 
 == Management
 
+These are required for lots the subsequent installations.
+
 |===
-| Tools name | Installation
+| Name | What it is | How to get it
 
 | xcode command line tools
+| basic command line dev tools (clang, ld, git, ...)
 | `xcode-select --install`
 
 | https://brew.sh[Homebrew]
+| CLI Package manager
 | `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 |===
 
 == CLI Tools
 
 |===
-| Tool Name | Installation
+| Tool name | What it is | How to get it
 
 | https://git-scm.com[git]
+| The most used SCM tool.
 | updated version with `brew install git`
 
 | brew cask
+| Homebrew 'extension' for graphical apps.
 | `brew install caskroom/casks/cask`
 
 | Haskell
+| The Haskell programming language & tools
 | `brew install ghc cabal`
+
+| Haskell dev tools
+| Some additional dev tools for Haskell (requires Haskell and cabal)
+| `cabal install ghc-mod stylish-haskell`
 |===
 
 == Graphic tools
 
 |===
-| Tool Name | Installation
+| Name | What it is | How to get it
 
 | https://atom.io[atom]
+| The text editor of the 21 century. Hackable, extensible and open-source.
 | `brew cask install atom`
 
 | Kodi
+| Open source extensibel media centre.
 | `brew cask install kodi`
 
 | Gitter
+| GitHub integrated, free chat client.
 | `brew cask install gitter`
 
 | Slack
+| Team based chat client.
 | `brew cask install slack`
 
-| Evernote
+| https://evernote.com[Evernote]
+| A better note taking tool.
 | `brew cask install evernote`
 
 | https://fluidapp.com[Fluid]
+| Make any webpage into a webview desktop app.
 | install from https://fluidapp.com[website]
 
 | Reeder
+| The most beautiful feed reader for mac.
 | Install from app store (because of license)
 |===
 
 == Fonts
 
 |===
-| Font name | Installation
+| Name | What it is | How to get it
 
-| Source Code Pro
+| http://adobe-fonts.github.io/source-code-pro/[Source Code Pro]
+| Beautiful monospace font.
 | https://github.com/adobe-fonts/source-code-pro/releases/latest[Download latest release]
 
-| Open Sans
+| http://fontfacekit.github.com/open-sans[Open Sans]
+| My favorite sons-serif font
 | https://github.com/FontFaceKit/open-sans/releases/latest[Download latest release]
 
-| Fira Mono
+| http://mozilla.github.io/Fira[Fira Mono]
+| Another beautiful monospace font (the one I currenty use).
 | https://github.com/mozilla/Fira/releases/latest[Download latest release]
 |===
