@@ -39,7 +39,7 @@ These are required for lots the subsequent installations.
 | `cabal install ghc-mod stylish-haskell`
 
 | https://python.org[Python 3]
-| The best scripting language int the world.
+| The best scripting language in the world.
 | `brew install python3`
 
 | https://python.org[Python 2]
@@ -64,8 +64,12 @@ These are required for lots the subsequent installations.
 | Open source extensibel media centre.
 | `brew cask install kodi`
 
+| https://libreoffice.org[Libre Office]
+| Open source document editing suite
+| `brew cask install libreoffice`
+
 | https://gitter.im[Gitter]
-| GitHub integrated, free chat client.
+| https://github.com[GitHub] integrated, free chat client.
 | `brew cask install gitter`
 
 | https://slack.com[Slack]
@@ -85,7 +89,7 @@ These are required for lots the subsequent installations.
 | Install from app store (because of license)
 
 | http://www.goofyapp.com/[Goofy]
-| A  "native" facebook client.
+| A  "native" https://facebook.com[facebook] client.
 | `brew cask install goofy`
 |===
 
