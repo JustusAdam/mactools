@@ -27,16 +27,28 @@ These are required for lots the subsequent installations.
 | updated version with `brew install git`
 
 | brew cask
-| Homebrew 'extension' for graphical apps.
+| Homebrew "extension" for graphical apps.
 | `brew install caskroom/casks/cask`
 
-| Haskell
-| The Haskell programming language & tools
+| https://haskell.org[Haskell]
+| The best programming language in the world. Haskell compiler & tools.
 | `brew install ghc cabal`
 
 | Haskell dev tools
 | Some additional dev tools for Haskell (requires Haskell and cabal)
 | `cabal install ghc-mod stylish-haskell`
+
+| https://python.org[Python 3]
+| The best scripting language int the world.
+| `brew install python3`
+
+| https://python.org[Python 2]
+| Python 2
+| Preinstalled, upgrade with `brew install python`. Then update `pip` and `setuptools` with `pip install --upgrade pip setuptools`
+
+| https://ruby-lang.org[Ruby]
+| The ruby programming language
+| Preinstalled, run `brew install ruby` to update/upgrade.
 |===
 
 == Graphic tools
@@ -48,15 +60,15 @@ These are required for lots the subsequent installations.
 | The text editor of the 21 century. Hackable, extensible and open-source.
 | `brew cask install atom`
 
-| Kodi
+| http://kodi.tv[Kodi]
 | Open source extensibel media centre.
 | `brew cask install kodi`
 
-| Gitter
+| https://gitter.im[Gitter]
 | GitHub integrated, free chat client.
 | `brew cask install gitter`
 
-| Slack
+| https://slack.com[Slack]
 | Team based chat client.
 | `brew cask install slack`
 
@@ -71,6 +83,10 @@ These are required for lots the subsequent installations.
 | Reeder
 | The most beautiful feed reader for mac.
 | Install from app store (because of license)
+
+| http://www.goofyapp.com/[Goofy]
+| A  "native" facebook client.
+| `brew cask install goofy`
 |===
 
 == Fonts
