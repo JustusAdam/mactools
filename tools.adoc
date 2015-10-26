@@ -26,9 +26,9 @@ These are required for lots the subsequent installations.
 | The most used SCM tool.
 | updated version with `brew install git`
 
-| brew cask
+| http://caskroom.io[brew cask]
 | Homebrew "extension" for graphical apps.
-| `brew install caskroom/casks/cask`
+| `brew install caskroom/casks/brew-cask`
 
 | https://haskell.org[Haskell]
 | The best programming language in the world. Haskell compiler & tools.
@@ -84,13 +84,21 @@ These are required for lots the subsequent installations.
 | Make any webpage into a webview desktop app.
 | install from https://fluidapp.com[website]
 
-| Reeder
+| http://reederapp.com/mac/[Reeder]
 | The most beautiful feed reader for mac.
 | Install from app store (because of license)
 
 | http://www.goofyapp.com/[Goofy]
 | A  "native" https://facebook.com[facebook] client.
 | `brew cask install goofy`
+
+| https://www.android.com/filetransfer/[Android File Transfer]
+| Transfer data to/from your android phone.
+| `brew cask install android-file-transfer`
+
+| http://felixdoering.com/AGDSN_traffic_Mac/[AGDSN Traffic counter]
+| Tracks the remaining data I have for my internet connection.
+| https://github.com/h4llow3En/AGDSN_traffic_Mac/releases[Download latest release]
 |===
 
 == Fonts
