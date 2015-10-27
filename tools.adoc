@@ -46,9 +46,17 @@ These are required for lots the subsequent installations.
 | Python 2
 | Preinstalled, upgrade with `brew install python`. Then update `pip` and `setuptools` with `pip install --upgrade pip setuptools`
 
+| http://zsh.sourceforge.net[Z Shell]
+| A better terminal.
+| `brew install zsh`
+
 | https://ruby-lang.org[Ruby]
 | The ruby programming language
 | Preinstalled, run `brew install ruby` to update/upgrade.
+
+| https://asciidoctor.org[Asciidoctor]
+| A plain text writing format.
+| `brew install asciidoctor`
 |===
 
 == Graphic tools
@@ -59,6 +67,10 @@ These are required for lots the subsequent installations.
 | https://atom.io[atom]
 | The text editor of the 21 century. Hackable, extensible and open-source.
 | `brew cask install atom`
+
+| http://latex-project.org[LaTeX]
+| A document preparation system
+| `brew cask install mactex`
 
 | http://kodi.tv[Kodi]
 | Open source extensibel media centre.
