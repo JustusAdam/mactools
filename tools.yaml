@@ -1,8 +1,7 @@
 # Essential Software for my Mac
 # Justus Adam <me@justus.science>
 
-management:
-  name: Management
+- name: Management
   description: These are required for lots of the subsequent installations.
   items:
     - name: xcode command line tools
@@ -19,8 +18,7 @@ management:
         type: raw_command
         value: 'ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
 
-cli_tools:
-  name: CLI Tools
+- name: CLI Tools
   items:
     - name: git
       url: https://git-scm.com
@@ -93,8 +91,7 @@ cli_tools:
         type: brew
         value: asciidoctor
 
-graphical_tools:
-  name: Graphical tools
+- name: Graphical tools
   items:
     - name: Atom
       url: https://atom.io
@@ -187,8 +184,7 @@ graphical_tools:
         type: brew cask
         value: mpv
 
-fonts:
-  name: Fonts
+- name: Fonts
   items:
     - name: Source Code Pro
       url: http://adobe-fonts.github.io/source-code-pro/
@@ -211,8 +207,7 @@ fonts:
         type: font
         value: https://github.com/mozilla/Fira/releases/latest
 
-necessary_utilities:
-  name: Necessary utilities
+- name: Necessary utilities
   items:
     - name: Java Development Kit (latest stable version)
       description: Runtime and development kit for the Java programming language

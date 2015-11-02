@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 set -e
+
+# install necessary prequisites
 bash script/bootstrap.sh
-runhaskell script/Main.hs
+
+# run the install script itself
+runhaskell script/Main.hs -- install tools.yaml >> tools.adoc
