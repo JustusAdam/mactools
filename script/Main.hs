@@ -7,6 +7,7 @@ module Main where
 
 import           Control.Monad
 import           Data.Either        (lefts)
+import           Data.List          (intersperse)
 import           Data.Monoid        ((<>))
 import           Data.Text          (Text)
 import           Data.Yaml
@@ -212,7 +213,7 @@ installToAdoc (Brew packages) = "`brew install " <> unwords packages <> "`"
 installToAdoc (BrewCask packages) = "`brew cask install " <> unwords packages <> "`"
 installToAdoc (Font url) = "Download latest release " <> url <> "[here]"
 installToAdoc (RawShellCommand c) = "`" <> c <> "`"
-installToAdoc (Compound installs) = foldl (\a b -> a <> ", then " <> b) "" $ map installToAdoc installs
+installToAdoc (Compound installs) = unwords $ intersperse "and then" $ map installToAdoc installs
 installToAdoc (Manual instruction) = instruction
 installToAdoc (Cabal packages) = "`cabal install " <> unwords packages <> "`"
 
