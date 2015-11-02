@@ -54,7 +54,7 @@ These are required for lots of the subsequent installations.
 
 | https://python.org[Python 2]
 | Python 2
-| , then `brew install python`, then `pip install --upgrade pip setuptools`
+| `brew install python` and then `pip install --upgrade pip setuptools`
 
 
 | http://zsh.sourceforge.net[Z shell]
