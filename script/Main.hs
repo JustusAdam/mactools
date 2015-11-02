@@ -56,6 +56,9 @@ data ToolSection = ToolSection
 type ToolFile = [ToolSection]
 
 
+type Key = Text
+
+
 putErr :: String -> IO ()
 putErr = hPutStr stderr
 
@@ -64,34 +67,75 @@ putErrLn :: String -> IO ()
 putErrLn = hPutStrLn stderr
 
 
+installationTypeKey :: Key
+installationTypeKey = "type"
+installationValueKey :: Key
+installationValueKey = "value"
+instBrewType :: Key
+instBrewType = "brew"
+instBrewCaskType :: Key
+instBrewCaskType = "brew cask"
+instRawCommandType :: Key
+instRawCommandType = "raw_command"
+instCompoundType :: Key
+instCompoundType = "compound"
+instManualType :: Key
+instManualType = "manual"
+instCabalType :: Key
+instCabalType = "cabal"
+instFontType :: Key
+instFontType = "font"
+
 instance FromJSON Installation where
 
   parseJSON (Object o) =
-    o .: "type" >>= installationFromType
+    o .: installationTypeKey >>= installationFromType
     where
-      getPackages a@(Array _)  = parseJSON a
-      getPackages b@(String _) = (: []) <$> parseJSON b
-      getPackages _            = mzero
+      packages = o .: installationValueKey >>= \case
+                  a@(Array _) -> parseJSON a
+                  b@(String _) -> (: []) <$> parseJSON b
+                  _ -> mzero
 
-      installationFromType :: String -> Parser Installation
-      installationFromType "brew"        = Brew <$> (o .: "value" >>= getPackages)
-      installationFromType "raw_command" = RawShellCommand <$> o .: "value"
-      installationFromType "font"        = Font <$> o .: "value"
-      installationFromType "compound"    = Compound <$> o .: "value"
-      installationFromType "brew cask"   = BrewCask <$> (o .: "value" >>= getPackages)
-      installationFromType "manual"      = Manual <$> o .: "value"
-      installationFromType "cabal"       = Cabal <$> (o .: "value" >>= getPackages)
-      installationFromType _             = mzero
+      installationFromType :: Text -> Parser Installation
+      installationFromType type'
+        | type' == instBrewType = Brew <$> packages
+        | type' == instRawCommandType = RawShellCommand <$> o .: installationValueKey
+        | type' == instFontType = Font <$> o .: installationValueKey
+        | type' == instCompoundType = Compound <$> o .: installationValueKey
+        | type' == instBrewCaskType = BrewCask <$> packages
+        | type' == instManualType = Manual <$> o .: installationValueKey
+        | type' == instCabalType = Cabal <$> packages
+        | otherwise = mzero
 
   parseJSON _ = mzero
 
+toInstallation :: ToJSON a => Text -> a -> Value
+toInstallation type' value =
+  object [ installationTypeKey .= type' , installationValueKey .= value ]
+
+instance ToJSON Installation where
+  toJSON (Brew pack) = toInstallation instBrewType pack
+  toJSON (BrewCask pack) = toInstallation instBrewCaskType pack
+  toJSON (Font s) = toInstallation instFontType s
+  toJSON (RawShellCommand cmd) = toInstallation instRawCommandType cmd
+  toJSON (Compound i) = toInstallation instCompoundType i
+  toJSON (Manual str) = toInstallation instManualType str
+  toJSON (Cabal pack) = toInstallation instCabalType pack
+
+
+instStatTypeKey :: Key
+instStatTypeKey = "type"
+instStatReasonKey :: Key
+instStatReasonKey = "value"
 
 instance FromJSON InstallStatus where
   parseJSON (Object o) =
-    (o .: "type" :: Parser String) >>= \case
-      "errored" -> Errored <$> o .: "reason"
-      "ignored" -> ErrorIgn <$> o .: "reason"
+    (o .: instStatTypeKey :: Parser String) >>= \case
+      "errored" -> Errored <$> reason
+      "ignored" -> ErrorIgn <$> reason
       _ -> mzero
+    where
+      reason = o .: instStatReasonKey
   parseJSON (String "installed") = return Installed
   parseJSON (String "not installed") = return InstallationPending
   parseJSON (String "pending") = return InstallationPending
@@ -99,65 +143,71 @@ instance FromJSON InstallStatus where
   parseJSON (Bool False) = return InstallationPending
   parseJSON _ = mzero
 
-
-instance FromJSON Tool where
-  parseJSON (Object o) = Tool
-    <$> o .: "name"
-    <*> o .: "description"
-    <*> o .:? "url" .!= Nothing
-    <*> o .: "installation"
-    <*> o .:? "status" .!= InstallationPending
-  parseJSON _ = mzero
-
-
-instance FromJSON ToolSection where
-  parseJSON (Object o) = ToolSection
-    <$> o .: "name"
-    <*> o .:? "description" .!= Nothing
-    <*> o .: "items"
-    <*> o .:? "halt_on_file" .!= False
-  parseJSON _ = mzero
-
-instance ToJSON Tool where
-  toJSON (Tool {..}) = object
-    [ "name" .= name
-    , "description" .= description
-    , "url" .= url
-    , "installation" .= installation
-    , "status" .= tStatus
-    ]
-
-instance ToJSON ToolSection where
-  toJSON (ToolSection {..}) = object
-    [ "name" .= sName
-    , "description" .= sDescription
-    , "items" .= sTools
-    , "halt_on_fail" .= haltOnFail
-    ]
-
-instance ToJSON Installation where
-  toJSON (Brew pack) = object
-    [ "type" .= ("brew" :: Text) , "value" .= pack ]
-  toJSON (BrewCask pack) = object
-    [ "type" .= ("brew cask" :: Text) , "value" .= pack ]
-  toJSON (Font s) = object
-    [ "type" .= ("font" :: Text), "value" .= s ]
-  toJSON (RawShellCommand cmd) = object
-    [ "type" .= ("raw_command" :: Text), "value" .= cmd ]
-  toJSON (Compound i) = object
-    [ "type" .= ("compound" :: Text), "value" .= i ]
-  toJSON (Manual str) = object
-    [ "type" .= ("manual" :: Text), "value" .= str ]
-  toJSON (Cabal pack) = object
-    [ "type" .= ("cabal" :: Text), "value" .= pack ]
+toInstallStatus :: ToJSON a => Text -> a -> Value
+toInstallStatus type' value =
+  object [ instStatTypeKey .= type', instStatReasonKey .= value ]
 
 instance ToJSON InstallStatus where
   toJSON Installed = "installed"
   toJSON InstallationPending = "pending"
-  toJSON (Errored reason) = object
-    [ "type" .= ("errored" :: Text), "reason" .= reason ]
-  toJSON (ErrorIgn reason) = object
-    [ "type" .= ("ignored" :: Text), "reason" .= reason ]
+  toJSON (Errored reason) = toInstallStatus "errored" reason
+  toJSON (ErrorIgn reason) = toInstallStatus "ignored" reason
+
+
+toolNameKey :: Key
+toolNameKey = "name"
+toolDescKey :: Key
+toolDescKey = "description"
+toolUrlKey :: Key
+toolUrlKey = "url"
+toolInstKey :: Key
+toolInstKey = "installation"
+toolStatusKey :: Key
+toolStatusKey = "status"
+
+instance FromJSON Tool where
+  parseJSON (Object o) = Tool
+    <$> o .: toolNameKey
+    <*> o .: toolDescKey
+    <*> o .:? toolUrlKey .!= Nothing
+    <*> o .: toolInstKey
+    <*> o .:? toolStatusKey .!= InstallationPending
+  parseJSON _ = mzero
+
+instance ToJSON Tool where
+  toJSON (Tool {..}) = object
+    [ toolNameKey .= name
+    , toolDescKey .= description
+    , toolUrlKey .= url
+    , toolInstKey .= installation
+    , toolStatusKey .= tStatus
+    ]
+
+
+toolSecNameKey :: Key
+toolSecNameKey = "name"
+toolSecDescKey :: Key
+toolSecDescKey = "description"
+toolSecItemsKey :: Key
+toolSecItemsKey = "items"
+toolHaltOnFailKey :: Key
+toolHaltOnFailKey = "halt_on_fail"
+
+instance FromJSON ToolSection where
+  parseJSON (Object o) = ToolSection
+    <$> o .: toolSecNameKey
+    <*> o .:? toolSecDescKey .!= Nothing
+    <*> o .: toolSecItemsKey
+    <*> o .:? toolHaltOnFailKey .!= False
+  parseJSON _ = mzero
+
+instance ToJSON ToolSection where
+  toJSON (ToolSection {..}) = object
+    [ toolSecNameKey .= sName
+    , toolSecDescKey .= sDescription
+    , toolSecItemsKey .= sTools
+    , toolHaltOnFailKey .= haltOnFail
+    ]
 
 
 installWithShellCommand :: String -> [String] -> [String] -> IO (Either String ())
@@ -344,15 +394,15 @@ main =
         then getCacheFile >>= \cacheFile -> decodeFileEither cacheFile >>= \case
           (Left err) -> putErrLn $ show err
           (Right tf) -> encodeFile cacheFile $ setCache cmd tf
-        else putErrLn $ "Invalid cache command \"" <> cmd <> "\""
-    ("set-cache":cmd) -> putErrLn $ "Invalid cache command \"" <> unwords cmd <> "\""
+        else putErrLn $ "Error: invalid cache command \"" <> cmd <> "\""
+    ("set-cache":cmd) -> putErrLn $ "Error: invalid cache command \"" <> unwords cmd <> "\""
     ["generate", file] -> genToolFile file
     ["generate"] -> genToolFile "tools.yaml"
     ["install", "continue"] -> installTools Nothing
     ["install", file] -> installTools (Just file)
     [] -> do
-      putErrLn "Expected command"
+      putErrLn "Error: expected command"
       exitWith (ExitFailure 1)
     cmds -> do
-      putErrLn ("Unknown command \"" <> unwords cmds <> "\"")
+      putErrLn ("Error: unknown command \"" <> unwords cmds <> "\"")
       exitWith (ExitFailure 1)
