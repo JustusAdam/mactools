@@ -109,18 +109,25 @@ instance FromJSON Installation where
 
   parseJSON _ = mzero
 
+
+unPackage :: Text -> [String] -> Value
+unPackage key [val] = toInstallation key val
+unPackage key val = toInstallation key val
+
 toInstallation :: ToJSON a => Text -> a -> Value
-toInstallation type' value =
-  object [ installationTypeKey .= type' , installationValueKey .= value ]
+toInstallation type' value = object
+  [ installationTypeKey .= type'
+  , installationValueKey .= value
+  ]
 
 instance ToJSON Installation where
-  toJSON (Brew pack) = toInstallation instBrewType pack
-  toJSON (BrewCask pack) = toInstallation instBrewCaskType pack
+  toJSON (Brew pack) = unPackage instBrewType pack
+  toJSON (BrewCask pack) = unPackage instBrewCaskType pack
   toJSON (Font s) = toInstallation instFontType s
   toJSON (RawShellCommand cmd) = toInstallation instRawCommandType cmd
   toJSON (Compound i) = toInstallation instCompoundType i
   toJSON (Manual str) = toInstallation instManualType str
-  toJSON (Cabal pack) = toInstallation instCabalType pack
+  toJSON (Cabal pack) = unPackage instCabalType pack
 
 
 instStatTypeKey :: Key
@@ -175,13 +182,12 @@ instance FromJSON Tool where
   parseJSON _ = mzero
 
 instance ToJSON Tool where
-  toJSON (Tool {..}) = object
+  toJSON (Tool {..}) = object $
     [ toolNameKey .= name
     , toolDescKey .= description
-    , toolUrlKey .= url
     , toolInstKey .= installation
     , toolStatusKey .= tStatus
-    ]
+    ] ++ maybe [] (return . (toolUrlKey .=)) url
 
 
 toolSecNameKey :: Key
@@ -222,6 +228,7 @@ installWithShellCommand command defaults extras =
         <> show c
         <> " and stderr: \n"
         <> err
+
 
 install :: Installation -> IO (Either String ())
 install (Brew packages) = installWithShellCommand "brew" ["install"] packages
@@ -400,6 +407,11 @@ main =
     ["generate"] -> genToolFile "tools.yaml"
     ["install", "continue"] -> installTools Nothing
     ["install", file] -> installTools (Just file)
+    ["test", in', out] -> do
+      tf <- decodeFile in'
+      case tf of
+        Nothing -> return ()
+        (Just tf) -> encodeFile out (tf :: ToolFile)
     [] -> do
       putErrLn "Error: expected command"
       exitWith (ExitFailure 1)
