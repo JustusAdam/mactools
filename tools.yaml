@@ -1,0 +1,219 @@
+# Essential Software for my Mac
+# Justus Adam <me@justus.science>
+
+management:
+  name: Management
+  description: These are required for lots of the subsequent installations.
+  items:
+    - name: xcode command line tools
+      description: basic command line dev tools (clang, ld, git, ...)
+      installation:
+        type: raw_command
+        value: xcode-select --install
+
+    - name: Homebrew
+      url: https://brew.sh
+      description: CLI Package manager
+      installation:
+        type: raw_command
+        value: 'ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
+
+cli_tools:
+  name: CLI Tools
+  items:
+    - name: git
+      url: https://git-scm.com
+      description: The most widely used SCM tool.
+      installation:
+        type: brew
+        value: git
+
+    - name: brew cask
+      url: http://caskroom.io
+      description: 'Homebrew "extension" for graphical apps.'
+      installation:
+        type: brew
+        value: caskroom/casks/brew-cask
+
+    - name: Haskell
+      url: https://haskell.org
+      description: The best programming language in the world. Haskell compiler & tools.
+      installation:
+        type: brew
+        value:
+          - ghc
+          - cabal
+
+    - name: Haskell dev tools
+      description: Some additional dev tools for Haskell (requires Haskell and cabal)
+      installation:
+        type: cabal
+        value:
+          - ghc-mod
+          - stylish-haskell
+
+    - name: Python 3
+      url: https://python.org
+      description: The best scripting language in the world.
+      installation:
+        type: brew
+        value: python3
+
+    - name: Python 2
+      url: https://python.org
+      description: Python 2
+      installation:
+        type: compound
+        value:
+          - type: brew
+            value: python
+          - type: raw_command
+            value: pip install --upgrade pip setuptools
+
+    - name: Z shell
+      url: http://zsh.sourceforge.net
+      description: A better terminal.
+      installation:
+        type: brew
+        value: zsh
+
+    - name: Ruby
+      url: https://ruby-lang.org
+      description: The ruby programming language
+      installation:
+        type: brew
+        value: ruby
+
+    - name: Asciidoctor
+      url: https://asciidoctor.org
+      description: A plain text writing format.
+      installation:
+        type: brew
+        value: asciidoctor
+
+graphical_tools:
+  name: Graphical tools
+  items:
+    - name: Atom
+      url: https://atom.io
+      description: The text editor of the 21 century. Hackable, extensible and open-source.
+      installation:
+        type: brew cask
+        value: atom
+
+    - name: LaTeX
+      url: http://latex-project.org
+      description: A document preparation system
+      installation:
+        type: brew cask
+        value: mactex
+
+    - name: Kodi
+      url: http://kodi.tv
+      description: Open source extensibel media centre.
+      installation:
+        type: brew cask
+        value: kodi
+
+    - name: Libre Office
+      url: https://libreoffice.org
+      description: Open source document editing suite
+      installation:
+        type: brew cask
+        value: libreoffice
+
+    - name: Gitter
+      url: https://gitter.im
+      description: GitHub integrated, free chat client.
+      installation:
+        type: brew cask
+        value: gitter
+
+    - name: Slack
+      url: https://slack.com
+      description: Team based chat client.
+      installation:
+        type: brew cask
+        value: slack
+
+    - name: Evernote
+      url: https://evernote.com
+      description: A better note taking tool.
+      installation:
+        type: brew cask
+        value: evernote
+
+    - name: Fluid
+      url: https://fluidapp.com
+      description: Make any webpage into a webview desktop app.
+      installation:
+        type: manual
+        value: Download and install from the website
+
+    - name: Reeder
+      url: http://reederapp.com/mac/
+      description: The most beautiful feed reader for mac.
+      installation:
+        type: manual
+        value: Install from app store (because of license)
+
+    - name: Goofy
+      url: http://www.goofyapp.com/
+      description: A "native" https://facebook.com[facebook] client.
+      installation:
+        type: brew cask
+        value: goofy
+
+    - name: Android File Tansfer
+      url: https://www.android.com/filetransfer/
+      description: Transfer data to/from your android phone.
+      installation:
+        type: brew cask
+        value: android-file-transfer
+
+    - name: AGDSN Traffic counter
+      url: http://felixdoering.com/AGDSN_traffic_Mac/
+      description: Tracks the remaining data I have for my internet connection.
+      installation:
+        type: manual
+        value: "Download latest release here: https://github.com/h4llow3En/AGDSN_traffic_Mac/releases"
+
+    - name: MPV media player
+      url: https://mpv.io
+      description: Play any kind of video
+      installation:
+        type: brew cask
+        value: mpv
+
+fonts:
+  name: Fonts
+  items:
+    - name: Source Code Pro
+      url: http://adobe-fonts.github.io/source-code-pro/
+      description: Beautiful monospace font.
+      installation:
+        type: font
+        value: https://github.com/adobe-fonts/source-code-pro/releases/latest
+
+    - name: Open Sans
+      url: http://fontfacekit.github.com/open-sans
+      description: My favorite sans-serif font
+      installation:
+        type: font
+        value: https://github.com/FontFaceKit/open-sans/releases/latest
+
+    - name: Fira Mono
+      url: http://mozilla.github.io/Fira
+      description: Another beautiful monospace font (the one I currently use).
+      installation:
+        type: font
+        value: https://github.com/mozilla/Fira/releases/latest
+
+necessary_utilities:
+  name: Necessary utilities
+  items:
+    - name: Java Development Kit (latest stable version)
+      description: Runtime and development kit for the Java programming language
+      installation:
+        type: brew cask
+        value: java
