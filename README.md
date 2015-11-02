@@ -9,6 +9,10 @@ This is basically a list of software-isch things that I would recommend. It star
 
 Every single item on this list I have installed and used and most likely am using still. This list is also highly opinionated.
 
-Suggestions for tings I may have missed are welcome but if I don't know or approve of the tool/software I won't merge it.
+Suggestions for things I may have missed are welcome but if I don't know or approve of the tool/software I won't merge it.
 
 Individual lists are sort-of ordered ascending by importance and opinion.
+
+## The List
+
+The list itself is `tools.yaml`. `tools.adoc` is generated from it using `Main.hs generate`.
