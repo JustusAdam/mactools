@@ -14,6 +14,7 @@ management:
     - name: Homebrew
       url: https://brew.sh
       description: CLI Package manager
+      install: false
       installation:
         type: raw_command
         value: 'ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
@@ -38,6 +39,7 @@ cli_tools:
     - name: Haskell
       url: https://haskell.org
       description: The best programming language in the world. Haskell compiler & tools.
+      install: false
       installation:
         type: brew
         value:

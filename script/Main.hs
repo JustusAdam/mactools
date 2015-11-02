@@ -5,10 +5,10 @@ module Main where
 
 import           Control.Monad
 import           Data.Aeson
-import System.Process
-import System.Exit
-import Data.Monoid
-import Data.Either (lefts)
+import           Data.Either    (lefts)
+import           Data.Monoid
+import           System.Exit
+import           System.Process
 
 
 data Installation
@@ -25,7 +25,7 @@ data Tool = Tool
   , description  :: String
   , url          :: Maybe String
   , installation :: Installation
-  , tInstall      :: Bool
+  , tInstall     :: Bool
   }
 
 data ToolSection = ToolSection

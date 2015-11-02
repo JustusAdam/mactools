@@ -23,7 +23,7 @@ These are required for lots the subsequent installations.
 | Tool name | What it is | How to get it
 
 | https://git-scm.com[git]
-| The most used SCM tool.
+| The most widely used SCM tool.
 | updated version with `brew install git`
 
 | http://caskroom.io[brew cask]
@@ -123,10 +123,20 @@ These are required for lots the subsequent installations.
 | https://github.com/adobe-fonts/source-code-pro/releases/latest[Download latest release]
 
 | http://fontfacekit.github.com/open-sans[Open Sans]
-| My favorite sons-serif font
+| My favorite sans-serif font
 | https://github.com/FontFaceKit/open-sans/releases/latest[Download latest release]
 
 | http://mozilla.github.io/Fira[Fira Mono]
-| Another beautiful monospace font (the one I currenty use).
+| Another beautiful monospace font (the one I currently use).
 | https://github.com/mozilla/Fira/releases/latest[Download latest release]
+|===
+
+== Necessary utilities
+
+|===
+| Name | What it is | How to get it
+
+| Java Development Kit (latest stable version)
+| Runtime and development kit for the Java programming language
+| `brew cask install java`
 |===
