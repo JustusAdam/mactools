@@ -114,7 +114,7 @@ instance FromJSON ToolSection where
     <$> o .: "name"
     <*> o .:? "description" .!= Nothing
     <*> o .: "items"
-    <*> o .: "halt_on_file" .!= False
+    <*> o .:? "halt_on_file" .!= False
   parseJSON _ = mzero
 
 instance ToJSON Tool where

@@ -3,6 +3,7 @@
 
 - name: Management
   description: These are required for lots of the subsequent installations.
+  halt_on_fail: true
   items:
     - name: xcode command line tools
       description: basic command line dev tools (clang, ld, git, ...)
@@ -19,6 +20,7 @@
         value: 'ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
 
 - name: CLI Tools
+  halt_on_fail: true
   items:
     - name: git
       url: https://git-scm.com
