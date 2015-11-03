@@ -211,8 +211,83 @@
 
 - name: Necessary utilities
   items:
-    - name: Java Development Kit (latest stable version)
-      description: Runtime and development kit for the Java programming language
+  - name: Java Development Kit (latest stable version)
+    description: Runtime and development kit for the Java programming language
+    installation:
+      type: brew cask
+      value: java
+
+- name: Atom plugins
+  items:
+    - name: Minimap
+      description: Displays an overview of your code
       installation:
-        type: brew cask
-        value: java
+        type: apm
+        value: minimap
+
+    - name: Haskell unicode snippets
+      description: Code completion snippets for Haskell unicode operators
+      installation:
+        type: apm
+        value: haskell-unicode-snippets
+
+    - name: Haskell ide packages
+      description: Packages for helping with Haskell development
+      installation:
+        type: apm
+        value:
+          - language-haskell
+          - haskell-ghc-mod
+          - ide-haskell-cabal
+          - autocomplete-haskell
+          - ide-haskell
+
+    - name: Color picker
+      description: Visual inline color picker
+      installation:
+        type: apm
+        value: color-picker
+
+    - name: File icons
+      description: Different icons for files, depending on their contents
+      installation:
+        type: apm
+        value: file-icons
+
+    - name: Git tools
+      description: Git keyboard shortcuts and commands for Atom
+      installation:
+        type: apm
+        value: git-plus
+
+    - name: Asciidoc tools
+      description: Markup and preview for asciidoc documents
+      installation:
+        type: apm
+        value:
+          - language-asciidoc
+          - asciidoc-preview
+
+    - name: Elm support
+      description: Markup and autocompletion for the Elm programming laguage
+      installation:
+        type: apm
+        value: language-elm
+
+    - name: Scala support
+      description: Markup and autocompletion for the Scala programming laguage
+      installation:
+        type: apm
+        value: language-scala
+
+    - name: Rust support
+      description: Markup and autocompletion for the Rust programming laguage
+      installation:
+        type: apm
+        value: language-rust
+
+    - name: Merge conflicts
+      description: Resolve git conflicts with visual markup within atom
+      installation:
+        type: apm
+        value: merge-conflicts

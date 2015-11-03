@@ -2,6 +2,8 @@
 {-# LANGUAGE NamedFieldPuns    #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
+{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
 module Main where
 
 
@@ -37,6 +39,7 @@ data Installation
   | Compound        [Installation]
   | Manual          String
   | Cabal           [String]
+  | Apm             [String]
 
 data Tool = Tool
   { name         :: String
@@ -85,6 +88,8 @@ instCabalType :: Key
 instCabalType = "cabal"
 instFontType :: Key
 instFontType = "font"
+instApmType :: Key
+instApmType = "apm"
 
 instance FromJSON Installation where
 
@@ -105,6 +110,7 @@ instance FromJSON Installation where
         | type' == instBrewCaskType = BrewCask <$> packages
         | type' == instManualType = Manual <$> o .: installationValueKey
         | type' == instCabalType = Cabal <$> packages
+        | type' == instApmType = Apm <$> packages
         | otherwise = mzero
 
   parseJSON _ = mzero
@@ -128,6 +134,7 @@ instance ToJSON Installation where
   toJSON (Compound i) = toInstallation instCompoundType i
   toJSON (Manual str) = toInstallation instManualType str
   toJSON (Cabal pack) = unPackage instCabalType pack
+  toJSON (Apm pack) = unPackage instApmType pack
 
 
 instStatTypeKey :: Key
@@ -216,6 +223,43 @@ instance ToJSON ToolSection where
     ]
 
 
+class ToAdoc a where
+  toAdoc :: a -> String
+
+instance ToAdoc ToolFile where
+  toAdoc toolFile = unlines $
+    [ "= Essential Software for my Mac"
+    , "Justus Adam <me@justus.science>"
+    ] ++ join (map (\t -> ["", "", toAdoc t]) toolFile)
+
+instance ToAdoc Tool where
+  toAdoc (Tool { name, description, url, installation }) = unlines $ map ("| " <>)
+    [ maybe id (\u n -> u <> "[" <> n <> "]") url name
+    , description
+    , toAdoc installation
+    ]
+
+instance ToAdoc ToolSection where
+  toAdoc (ToolSection { sName, sDescription, sTools }) = unlines $
+    ("== " <> sName)
+    : ([""] <> maybe [] (: [""]) sDescription)
+    ++ [ "|==="
+       , "| Name | What it is | How to get it"
+       ]
+    ++ join (map (\t -> ["", toAdoc t]) sTools)
+    ++ ["|==="]
+
+instance ToAdoc Installation where
+  toAdoc (Brew packages) = "`brew install " <> unwords packages <> "`"
+  toAdoc (BrewCask packages) = "`brew cask install " <> unwords packages <> "`"
+  toAdoc (Font url) = "Download latest release " <> url <> "[here]"
+  toAdoc (RawShellCommand c) = "`" <> c <> "`"
+  toAdoc (Compound installs) = unwords $ intersperse "and then" $ map toAdoc installs
+  toAdoc (Manual instruction) = instruction
+  toAdoc (Cabal packages) = "`cabal install " <> unwords packages <> "`"
+  toAdoc (Apm packages) = "`apm install " <> unwords packages <> "`"
+
+
 installWithShellCommand :: String -> [String] -> [String] -> IO (Either String ())
 installWithShellCommand command defaults extras =
   readProcessWithExitCode command (defaults <> extras) "" >>= \case
@@ -248,42 +292,7 @@ install (Manual descr) = do
   putErrLn descr
   return $ Right ()
 install (Cabal packages) = installWithShellCommand "cabal" ["install"] packages
-
-
-toolFileToAdoc :: ToolFile -> String
-toolFileToAdoc toolFile = unlines $
-  [ "= Essential Software for my Mac"
-  , "Justus Adam <me@justus.science>"
-  ] ++ join (map (\t -> ["", "", toolSectionToAdoc t]) toolFile)
-
-
-toolToAdoc :: Tool -> String
-toolToAdoc (Tool { name, description, url, installation }) = unlines $ map ("| " <>)
-  [ maybe id (\u n -> u <> "[" <> n <> "]") url name
-  , description
-  , installToAdoc installation
-  ]
-
-
-installToAdoc :: Installation -> String
-installToAdoc (Brew packages) = "`brew install " <> unwords packages <> "`"
-installToAdoc (BrewCask packages) = "`brew cask install " <> unwords packages <> "`"
-installToAdoc (Font url) = "Download latest release " <> url <> "[here]"
-installToAdoc (RawShellCommand c) = "`" <> c <> "`"
-installToAdoc (Compound installs) = unwords $ intersperse "and then" $ map installToAdoc installs
-installToAdoc (Manual instruction) = instruction
-installToAdoc (Cabal packages) = "`cabal install " <> unwords packages <> "`"
-
-
-toolSectionToAdoc :: ToolSection -> String
-toolSectionToAdoc (ToolSection { sName, sDescription, sTools }) = unlines $
-  ("== " <> sName)
-  : ([""] <> maybe [] (: [""]) sDescription)
-  ++ [ "|==="
-     , "| Name | What it is | How to get it"
-     ]
-  ++ join (map (\t -> ["", toolToAdoc t]) sTools)
-  ++ ["|==="]
+install (Apm packages) = installWithShellCommand "apm" ["install"] packages
 
 
 getCacheDir :: IO FilePath
@@ -334,7 +343,7 @@ genToolFile file =
       putErrLn $ show err
       exitWith (ExitFailure 2)
     Right toolFile ->
-      putStrLn $ toolFileToAdoc toolFile
+      putStrLn $ toAdoc (toolFile :: ToolFile)
 
 
 installSection :: ToolSection -> IO (ToolSection, Either String ())
