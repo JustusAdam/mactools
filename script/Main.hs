@@ -1,9 +1,9 @@
-{-# LANGUAGE LambdaCase        #-}
-{-# LANGUAGE NamedFieldPuns    #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards   #-}
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE LambdaCase           #-}
+{-# LANGUAGE NamedFieldPuns       #-}
+{-# LANGUAGE OverloadedStrings    #-}
+{-# LANGUAGE RecordWildCards      #-}
 {-# LANGUAGE TypeSynonymInstances #-}
-{-# LANGUAGE FlexibleInstances #-}
 module Main where
 
 
@@ -416,11 +416,8 @@ main =
     ["generate"] -> genToolFile "tools.yaml"
     ["install", "continue"] -> installTools Nothing
     ["install", file] -> installTools (Just file)
-    ["test", in', out] -> do
-      tf <- decodeFile in'
-      case tf of
-        Nothing -> return ()
-        (Just tf) -> encodeFile out (tf :: ToolFile)
+    ["test", in', out] ->
+      decodeFile in' >>= maybe (return ()) (encodeFile out :: ToolFile -> IO ())
     [] -> do
       putErrLn "Error: expected command"
       exitWith (ExitFailure 1)
