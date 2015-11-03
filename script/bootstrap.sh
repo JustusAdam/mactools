@@ -8,4 +8,4 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 brew install ghc cabal
 
 # install packages required to run the setup script
-cabal install process yaml
+cabal install process yaml directory filepath
