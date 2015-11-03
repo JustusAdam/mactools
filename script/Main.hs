@@ -8,7 +8,6 @@ module Main where
 
 
 import           Control.Monad
-import           Data.Either        (lefts)
 import           Data.List          (intersperse)
 import           Data.Monoid        ((<>))
 import           Data.Text          (Text)
@@ -28,8 +27,8 @@ cacheFileName = "cache.yaml"
 data InstallStatus
   = Installed
   | InstallationPending
-  | Errored String
-  | ErrorIgn String
+  | Errored CallResult
+  | ErrorIgn CallResult
 
 data Installation
   = Brew            [String]
@@ -60,6 +59,13 @@ type ToolFile = [ToolSection]
 
 
 type Key = Text
+
+
+data CallResult = CallResult
+  { commandName :: String
+  , returnCode :: Maybe Int
+  , resultStderr :: String
+  } deriving (Show, Eq)
 
 
 putErr :: String -> IO ()
@@ -197,6 +203,29 @@ instance ToJSON Tool where
     ] ++ maybe [] (return . (toolUrlKey .=)) url
 
 
+callResCommandKey :: Text
+callResCommandKey = "command"
+callResRetCodeKey :: Text
+callResRetCodeKey = "returncode"
+callResStderrKey :: Text
+callResStderrKey = "stderr"
+
+instance FromJSON CallResult where
+  parseJSON (Object o) = CallResult
+    <$> o .: callResCommandKey
+    <*> o .:? callResRetCodeKey .!= Nothing
+    <*> o .:? callResStderrKey .!= ""
+  parseJSON _ = mzero
+
+
+instance ToJSON CallResult where
+  toJSON (CallResult {..}) = object $
+    [ callResCommandKey .= commandName
+    ]
+    ++ maybe [] (return . (callResRetCodeKey .=)) returnCode
+    ++ (if null resultStderr then [] else [callResStderrKey .= resultStderr] )
+
+
 toolSecNameKey :: Key
 toolSecNameKey = "name"
 toolSecDescKey :: Key
@@ -260,33 +289,31 @@ instance ToAdoc Installation where
   toAdoc (Apm packages) = "`apm install " <> unwords packages <> "`"
 
 
-installWithShellCommand :: String -> [String] -> [String] -> IO (Either String ())
+installWithShellCommand :: String -> [String] -> [String] -> IO (Either CallResult ())
 installWithShellCommand command defaults extras =
   readProcessWithExitCode command (defaults <> extras) "" >>= \case
     (ExitSuccess, _, _) -> return (Right ())
     (ExitFailure c, _, err) ->
       return $ Left $
-        "Command `"
-        <> unwords defaults
-        <> "` failed with code: "
-        <> show c
-        <> " and stderr: \n"
-        <> err
+        CallResult (unwords defaults) (return c) err
 
 
-install :: Installation -> IO (Either String ())
+install :: Installation -> IO (Either CallResult ())
 install (Brew packages) = installWithShellCommand "brew" ["install"] packages
 install (BrewCask packages) = installWithShellCommand "brew" ["cask", "install"] packages
-install (Font _) = return $ Left "Font install not supported yet."
+install (Font f) = return $ Left $ CallResult ("install font " <> f) Nothing "Font install not supported yet."
 install (RawShellCommand command) = do
   putErrLn "Note that executing raw shell commands is always dangerous!"
   (<$> system command) $ \case
     ExitSuccess -> Right ()
-    (ExitFailure code) -> Left $ "Command failed with " <> show code
+    (ExitFailure code) -> Left $ CallResult command (return code) ""
 install (Compound insts) =
-  (<$> traverse install insts) $ (. lefts) $ \case
-    [] -> Right ()
-    failiures -> Left (unlines failiures)
+  go insts
+  where
+    go [] = return $ Right ()
+    go (curr:remaining) = install curr >>= \case
+      (Right _) -> go remaining
+      err -> return err
 install (Manual descr) = do
   putErrLn "Manual installation required:"
   putErrLn descr
@@ -346,7 +373,7 @@ genToolFile file =
       putStrLn $ toAdoc (toolFile :: ToolFile)
 
 
-installSection :: ToolSection -> IO (ToolSection, Either String ())
+installSection :: ToolSection -> IO (ToolSection, Either CallResult ())
 installSection t@(ToolSection { sName, sTools, haltOnFail }) = do
   putStrLn $ "Installing section \"" <> sName <> "\""
   go [] sTools
@@ -361,7 +388,7 @@ installSection t@(ToolSection { sName, sTools, haltOnFail }) = do
         (Right ()) -> putErrLn "success" >> go (ct { tStatus = Installed } : processed) ts
         (Left err) -> do
           putErrLn "failed"
-          putErrLn err
+          putErrLn (show err)
           if haltOnFail
             then return (t { sTools = reverse $ ct { tStatus = Errored err } : processed}, Left err)
             else go (ct { tStatus = ErrorIgn err } : processed) ts
