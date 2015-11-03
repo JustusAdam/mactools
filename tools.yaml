@@ -269,19 +269,19 @@
           - asciidoc-preview
 
     - name: Elm support
-      description: Markup and autocompletion for the Elm programming laguage
+      description: Markup and autocompletion for the Elm programming language
       installation:
         type: apm
         value: language-elm
 
     - name: Scala support
-      description: Markup and autocompletion for the Scala programming laguage
+      description: Markup and autocompletion for the Scala programming language
       installation:
         type: apm
         value: language-scala
 
     - name: Rust support
-      description: Markup and autocompletion for the Rust programming laguage
+      description: Markup and autocompletion for the Rust programming language
       installation:
         type: apm
         value: language-rust

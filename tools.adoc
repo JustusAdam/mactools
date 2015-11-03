@@ -183,3 +183,66 @@ These are required for lots of the subsequent installations.
 |===
 
 
+
+== Atom plugins
+
+|===
+| Name | What it is | How to get it
+
+| Minimap
+| Displays an overview of your code
+| `apm install minimap`
+
+
+| Haskell unicode snippets
+| Code completion snippets for Haskell unicode operators
+| `apm install haskell-unicode-snippets`
+
+
+| Haskell ide packages
+| Packages for helping with Haskell development
+| `apm install language-haskell haskell-ghc-mod ide-haskell-cabal autocomplete-haskell ide-haskell`
+
+
+| Color picker
+| Visual inline color picker
+| `apm install color-picker`
+
+
+| File icons
+| Different icons for files, depending on their contents
+| `apm install file-icons`
+
+
+| Git tools
+| Git keyboard shortcuts and commands for Atom
+| `apm install git-plus`
+
+
+| Asciidoc tools
+| Markup and preview for asciidoc documents
+| `apm install language-asciidoc asciidoc-preview`
+
+
+| Elm support
+| Markup and autocompletion for the Elm programming language
+| `apm install language-elm`
+
+
+| Scala support
+| Markup and autocompletion for the Scala programming language
+| `apm install language-scala`
+
+
+| Rust support
+| Markup and autocompletion for the Rust programming language
+| `apm install language-rust`
+
+
+| Merge conflicts
+| Resolve git conflicts with visual markup within atom
+| `apm install merge-conflicts`
+
+|===
+
+
