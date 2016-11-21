@@ -43,12 +43,18 @@
     - name: Haskell
       url: https://haskell.org
       description: The best programming language in the world. Haskell compiler & tools.
-      install: false
       installation:
         type: brew
         value:
           - ghc
           - cabal
+    
+    - name: Stack
+      url: https://docs.haskellstack.org
+      description: Mature project management for Haskell.
+      install: false
+      type: brew
+      value: haskell-stack
 
     - name: Haskell dev tools
       description: Some additional dev tools for Haskell (requires Haskell and cabal)
