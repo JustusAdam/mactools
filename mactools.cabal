@@ -3,8 +3,8 @@ version:             0.1
 synopsis:            Initial project template from stack
 description:         Please see README.md
 homepage:            http://github.com/githubuser/mactools#readme
--- license:             BSD3
--- license-file:        LICENSE
+license:             MIT
+license-file:        LICENSE
 author:              Justus Adam
 maintainer:          dev@justus.science
 copyright:           2015, 2016 Justus Adam
