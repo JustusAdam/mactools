@@ -28,6 +28,10 @@
       installation:
         type: brew
         value: git
+    - name: uncrustify
+      installation:
+        type: brew
+        value: uncrustify
 
     - name: brew cask
       url: http://caskroom.io
