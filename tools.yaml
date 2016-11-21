@@ -28,10 +28,6 @@
       installation:
         type: brew
         value: git
-    - name: uncrustify
-      installation:
-        type: brew
-        value: uncrustify
 
     - name: brew cask
       url: http://caskroom.io
@@ -53,8 +49,9 @@
       url: https://docs.haskellstack.org
       description: Mature project management for Haskell.
       install: false
-      type: brew
-      value: haskell-stack
+      installation:
+        type: brew
+        value: haskell-stack
 
     - name: Haskell dev tools
       description: Some additional dev tools for Haskell (requires Haskell and cabal)
@@ -105,6 +102,13 @@
 
 - name: Graphical tools
   items:
+    - name: Visual Studio Code
+      url: https://code.visualstudio.com
+      description: Code Editing. Redefined.
+      installation:
+        type: brew cask
+        value: visual-studio-code
+
     - name: Atom
       url: https://atom.io
       description: The text editor of the 21 century. Hackable, extensible and open-source.

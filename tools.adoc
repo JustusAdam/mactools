@@ -42,6 +42,11 @@ These are required for lots of the subsequent installations.
 | `brew install ghc cabal`
 
 
+| https://docs.haskellstack.org[Stack]
+| Mature project management for Haskell.
+| `brew install haskell-stack`
+
+
 | Haskell dev tools
 | Some additional dev tools for Haskell (requires Haskell and cabal)
 | `cabal install ghc-mod stylish-haskell`
@@ -79,6 +84,11 @@ These are required for lots of the subsequent installations.
 
 |===
 | Name | What it is | How to get it
+
+| https://code.visualstudio.com[Visual Studio Code]
+| Code Editing. Redefined.
+| `brew cask install visual-studio-code`
+
 
 | https://atom.io[Atom]
 | The text editor of the 21 century. Hackable, extensible and open-source.
@@ -242,6 +252,11 @@ These are required for lots of the subsequent installations.
 | Merge conflicts
 | Resolve git conflicts with visual markup within atom
 | `apm install merge-conflicts`
+
+
+| Python advanced autocompletion
+| Better autocompletion for python code
+| `apm install autocomplete-python`
 
 |===
 
