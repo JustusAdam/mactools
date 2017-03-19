@@ -275,8 +275,8 @@ instance ToAdoc ToolSection where
         ("== " <> sName)
         : ([""] <> maybe [] (: [""]) sDescription)
         ++ [ "|==="
-        , "| Name | What it is | How to get it"
-        ]
+           , "| Name | What it is | How to get it"
+           ]
         ++ join (map (\t -> ["", toAdoc t]) sTools)
         ++ ["|==="]
 
@@ -431,13 +431,16 @@ main =
     getArgs >>= \case
         ["set-cache", cmd] ->
             if cmd `elem` validCacheCommands
-                then getCacheFile >>= \cacheFile -> decodeFileEither cacheFile >>= \case
-                    Left err -> putErrLn $ show err
-                    Right tf -> encodeFile cacheFile $ setCache cmd tf
+                then do 
+                    cacheFile <- getCacheFile 
+                    decodeFileEither cacheFile >>= \case
+                        Left err -> putErrLn $ show err
+                        Right tf -> encodeFile cacheFile $ setCache cmd tf
                 else putErrLn $ "Error: invalid cache command \"" <> cmd <> "\""
         ("set-cache":cmd) -> putErrLn $ "Error: invalid cache command \"" <> unwords cmd <> "\""
         ["generate", file] -> genToolFile file
         ["generate"] -> genToolFile "tools.yaml"
+        ["install"] -> installTools (Just "tools.yaml")
         ["install", "continue"] -> installTools Nothing
         ["install", file] -> installTools (Just file)
         ["test", in', out] ->
